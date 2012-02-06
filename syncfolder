@@ -12,7 +12,7 @@ $host = 'openphoto.adrien-gallou.fr';
 // Includes
 // ---------
 
-include 'OpenPhotoOAuth.php';
+include 'api-php/OpenPhotoOAuth.php';
 
 // ---------
 // Classes
