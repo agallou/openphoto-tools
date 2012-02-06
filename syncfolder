@@ -7,7 +7,7 @@
 
 $host = 'openphoto.adrien-gallou.fr';
 
-include 'api-php/OpenPhotoOAuth.php';
+include 'vendor/api-php/OpenPhotoOAuth.php';
 include 'src/syncLogger.class.php';
 include 'src/functions.php';
 include 'config/config.php';
