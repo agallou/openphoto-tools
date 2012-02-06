@@ -1,33 +1,13 @@
 #!/usr/bin/php
 <?php
 
-// ---------
-// Config
-// ---------
-
-$host = 'openphoto.adrien-gallou.fr';
-
 include 'vendor/api-php/OpenPhotoOAuth.php';
 include 'src/syncLogger.class.php';
 include 'src/functions.php';
 include 'config/config.php';
 
-
-// ---------
-// Config
-// ---------
-
-$consumerKey    = getenv('consumerKey');
-$consumerSecret = getenv('consumerSecret');
-$token          = getenv('token');
-$tokenSecret    = getenv('tokenSecret');
-
-// ---------
-// Execution
-// ---------
-
 $dir    = $argv[1];
-$client = new OpenPhotoOAuth($host, $consumerKey, $consumerSecret, $token, $tokenSecret);
+$client = new OpenPhotoOAuth($config['host'], $config['consumer_key'], $config['consumer_secret'], $config['token'], $config['token_secret']);
 $logger = new syncLogger();
 $hashs  = getHashs($client);
 $paths  = getPaths($dir);
@@ -41,4 +21,3 @@ foreach ($paths as $pathName)
 $newHashs = getHashs($client);
 $logger->log(sprintf('%s photos added', count($newHashs) - count($hashs)));
 $logger->log(sprintf('%s photos now on openphoto', count($hashs)));
-
