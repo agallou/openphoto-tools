@@ -32,7 +32,7 @@ function getHashs(OpenPhotoOAuth $client)
 
 function isFileUploaded($hashs, $file)
 {
-  $tmpFile = 'tmp_file';
+  $tmpFile = '/tmp/openphoto-api-tmp_file';
   copy($file, $tmpFile);
   exec(sprintf('./exiftran -ai %s 2>/dev/null', $tmpFile));
   $sha1 = sha1_file($tmpFile);
