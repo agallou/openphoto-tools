@@ -1,0 +1,92 @@
+#!/usr/bin/php
+<?php
+$rootDir = dirname(__FILE__) . '/../';
+
+include $rootDir . '/vendor/api-php/OpenPhotoOAuth.php';
+include $rootDir . '/src/syncLogger.class.php';
+include $rootDir . '/src/OpenPhotoOAuthFactory.class.php';
+include $rootDir . '/src/functions.php';
+include $rootDir . '/config/defaults.php';
+
+
+
+$oAuthFactory = new OpenPhotoOAuthFactory();
+$client       = $oAuthFactory->create($config);
+$logger       = new syncLogger();
+$hashs        = getHashs($client);
+
+$logger->log(sprintf('%s duplicates photos on openphoto', count($hashs) - count(array_unique($hashs))));
+$hashs2 = $hashs;
+$treatedDuplicatesIds = array();
+
+foreach ($hashs as $id => $hash)
+{
+  $duplicates = array();
+  foreach ($hashs2 as $id2 => $hash2)
+  {
+    if ($hash == $hash2 && !in_array($id2, $treatedDuplicatesIds))
+    {
+      $duplicates[$id2]       = $hash2;
+      $treatedDuplicatesIds[] = $id2;
+    }
+  }
+  if (count($duplicates) < 2)
+  {
+    continue;
+  }
+  $i = 1;
+  $tags = array();
+  $askedIds = array();
+  foreach (array_keys($duplicates) as $duplicateId)
+  {
+    $photo = getPhoto($client, $duplicateId);
+    $photoTags = $photo['tags'];
+    if ($key = array_search('__synchronised__', $photoTags))
+    {
+      unset($photoTags[$key]);
+    }
+    $tag = implode(',', $photoTags);
+    $askedIds[$i] = $photo['id'];
+    echo sprintf('%s - %s - %s [%s] ', $i, str_pad($photo['id'], 4, ' ', STR_PAD_LEFT), $photo['title'], $tag) . PHP_EOL;
+    $tags[] = $tag;
+    $i++;
+  }
+  $remove = array();
+  if (count(array_unique($tags)) == 1)
+  {
+    $duplicateIds = array_keys($duplicates);
+    array_shift($duplicateIds);
+    $logger->log(sprintf('Tags are identicals, no need to ask, we delete %s', implode(',', $duplicateIds)));
+    $remove = $duplicateIds;
+  }
+  else
+  {
+    if (isset($argv[1]) && $argv[1] == 'only-auto')
+    {
+      continue;
+    }
+    $message = 'Which picture to keep ? (0, do noting)';
+    $value = getUserInput($message);
+    if (!in_array($value, array_keys($askedIds)))
+    {
+      $logger->log('Do nothing');
+      continue;
+    }
+    foreach ($askedIds as $id => $photoId)
+    {
+      if ($id == $value)
+      {
+        continue;
+      }
+      $remove[] = $photoId;
+    }
+  }
+  foreach ($remove as $id)
+  {
+    $logger->log(sprintf('Removing photo "%s"...', $id));
+    $client->post(sprintf('/photo/%s/delete.json', $id));
+    $logger->log(sprintf('Photo "%s" removed', $id));
+  }
+  $logger->log('');
+}
+

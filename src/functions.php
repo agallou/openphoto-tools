@@ -82,3 +82,16 @@ function getPaths($dir)
   return $paths;
 }
 
+function getPhoto(OpenPhotoOAuth $client, $id)
+{
+  $response = $client->get(sprintf('/photo/%s/view.json', $id));
+  $photo    = json_decode($response);
+  return new ArrayObject($photo->result);
+}
+
+function getUserInput($msg)
+{
+  fwrite(STDOUT, "$msg: ");
+  $varin = trim(fgets(STDIN));
+  return $varin;
+}
