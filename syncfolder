@@ -4,7 +4,7 @@
 include 'vendor/api-php/OpenPhotoOAuth.php';
 include 'src/syncLogger.class.php';
 include 'src/functions.php';
-include 'config/config.php';
+include 'config/defaults.php';
 
 $dir    = $argv[1];
 $client = new OpenPhotoOAuth($config['host'], $config['consumer_key'], $config['consumer_secret'], $config['token'], $config['token_secret']);
