@@ -1,10 +1,11 @@
 #!/usr/bin/php
 <?php
+$rootDir = dirname(__FILE__) . '/../';
 
-include 'vendor/api-php/OpenPhotoOAuth.php';
-include 'src/syncLogger.class.php';
-include 'src/functions.php';
-include 'config/defaults.php';
+include $rootDir . '/vendor/api-php/OpenPhotoOAuth.php';
+include $rootDir . '/src/syncLogger.class.php';
+include $rootDir . '/src/functions.php';
+include $rootDir . '/config/defaults.php';
 
 $dir    = $argv[1];
 $client = new OpenPhotoOAuth($config['host'], $config['consumer_key'], $config['consumer_secret'], $config['token'], $config['token_secret']);
