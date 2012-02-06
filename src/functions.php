@@ -30,17 +30,17 @@ function getHashs(OpenPhotoOAuth $client)
   return $hashs;
 }
 
-function isFileUploaded($hashs, $file)
+function isFileUploaded($exiftran, $hashs, $file)
 {
   $tmpFile = '/tmp/openphoto-api-tmp_file';
   copy($file, $tmpFile);
-  exec(sprintf('./exiftran -ai %s 2>/dev/null', $tmpFile));
+  exec(sprintf('%s -ai %s 2>/dev/null', $exiftran, $tmpFile));
   $sha1 = sha1_file($tmpFile);
   
   return in_array($sha1, $hashs);
 }
 
-function uploadFile(OpenPhotoOAuth $client, syncLogger $logger, $hashs, $file)
+function uploadFile(OpenPhotoOAuth $client, syncLogger $logger, $exiftran, $hashs, $file)
 {
   $expTitle = explode('/', $file);
   $title    = array_pop($expTitle);
@@ -48,7 +48,7 @@ function uploadFile(OpenPhotoOAuth $client, syncLogger $logger, $hashs, $file)
   $title    = $dir . '/' . $title;
   $tags     = substr($dir, 11) . ',__synchronised__';
   
-  if (!isFileUploaded($hashs, $file))
+  if (!isFileUploaded($exiftran, $hashs, $file))
   {
     $logger->log(sprintf('[uploading] %s', $file));
     $r = $client->post('/photo/upload.json', array(
