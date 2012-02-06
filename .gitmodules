@@ -1,0 +1,3 @@
+[submodule "api-php"]
+	path = api-php
+	url = git://github.com/openphoto/openphoto-php.git
