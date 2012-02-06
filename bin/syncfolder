@@ -4,14 +4,17 @@ $rootDir = dirname(__FILE__) . '/../';
 
 include $rootDir . '/vendor/api-php/OpenPhotoOAuth.php';
 include $rootDir . '/src/syncLogger.class.php';
+include $rootDir . '/src/OpenPhotoOAuthFactory.class.php';
 include $rootDir . '/src/functions.php';
 include $rootDir . '/config/defaults.php';
 
-$dir    = $argv[1];
-$client = new OpenPhotoOAuth($config['host'], $config['consumer_key'], $config['consumer_secret'], $config['token'], $config['token_secret']);
-$logger = new syncLogger();
-$hashs  = getHashs($client);
-$paths  = getPaths($dir);
+$dir          = $argv[1];
+$oAuthFactory = new OpenPhotoOAuthFactory();
+$client       = $oAuthFactory->create($config);
+$logger       = new syncLogger();
+$hashs        = getHashs($client);
+$paths        = getPaths($dir);
+
 $logger->log(sprintf('%s photos on openphoto', count($hashs)));
 
 foreach ($paths as $pathName)
