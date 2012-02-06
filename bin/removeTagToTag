@@ -1,0 +1,26 @@
+#!/usr/bin/php
+<?php
+$rootDir = dirname(__FILE__) . '/../';
+
+include $rootDir . '/vendor/api-php/OpenPhotoOAuth.php';
+include $rootDir . '/src/syncLogger.class.php';
+include $rootDir . '/src/OpenPhotoOAuthFactory.class.php';
+include $rootDir . '/src/functions.php';
+include $rootDir . '/config/defaults.php';
+
+$oAuthFactory = new OpenPhotoOAuthFactory();
+$client       = $oAuthFactory->create($config);
+$logger       = new syncLogger();
+$tag          = $argv[1];
+$tagsAdd      = $argv[2];
+$hashs        = getHashs($client, $tag);
+
+$logger->log(sprintf('%s photos tagged with "%s"', count($hashs), $tag));
+
+foreach (array_keys($hashs) as $idPhoto)
+{
+  $response  = $client->post(sprintf("/photo/%s/update.json", $idPhoto), array('tagsRemove' => $tagsAdd));
+  $logger->log(sprintf('Tag(s) "%s" removed to photo "%s"', $tagsAdd, $idPhoto));
+}
+ $logger->log(sprintf('%s photos updated', count($hashs)));
+
