@@ -1,6 +1,6 @@
 <?php
 
-function getHashs(OpenPhotoOAuth $client)
+function getHashs(OpenPhotoOAuth $client, $tags = null)
 {
   $hashs    = array();
   $continue = true;
@@ -10,7 +10,12 @@ function getHashs(OpenPhotoOAuth $client)
     $page++;
     //bug un page, the same photos are return even if we change the page number ?
     //to prevent that, we increase the pageSize.
-    $response  = $client->get("/photos/list.json", array('page' => $page, 'pageSize' => 10000));
+    $params = array('page' => $page, 'pageSize' => 10000);
+    if (null !== $tags)
+    {
+      $params['tags'] = $tags;
+    }
+    $response  = $client->get("/photos/list.json", $params);
     $dResponse = json_decode($response);
     $photos    = $dResponse->result;
     foreach ($photos as $photo)
