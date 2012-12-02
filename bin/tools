@@ -14,6 +14,7 @@ include $rootDir . '/config/defaults.php';
 require $rootDir . '/vendor/themattharris/tmhoauth/src/Themattharris/TmhOAuth.php';
 
 use Openphototools\Command\TweetCommand;
+use Openphototools\Command\SyncFolderCommand;
 use Openphototools\Application;
 
 $configFile = __DIR__ . '/../config/config.php';
@@ -45,4 +46,6 @@ $deps['exiftran.path'] = $config['exiftran'];
 $application = new Application();
 $application->setDependancies($deps);
 $application->add(new TweetCommand);
+$application->add(new SyncFolderCommand);
+
 $application->run();
