@@ -17,6 +17,8 @@ use Openphototools\Command\TweetCommand;
 use Openphototools\Command\SyncFolderCommand;
 use Openphototools\Command\AddTagToTagCommand;
 use Openphototools\Command\AddLocationToTagCommand;
+use Openphototools\Command\AddGroupToTagCommand;
+
 
 use Openphototools\Application;
 
@@ -52,6 +54,7 @@ $application->add(new TweetCommand);
 $application->add(new SyncFolderCommand);
 $application->add(new AddTagToTagCommand);
 $application->add(new AddLocationToTagCommand);
+$application->add(new AddGroupToTagCommand);
 
 
 $application->run();
