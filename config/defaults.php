@@ -5,5 +5,5 @@ $config['consumer_key']    = getenv('consumerKey');
 $config['consumer_secret'] = getenv('consumerSecret');
 $config['token']           = getenv('token');
 $config['token_secret']    = getenv('tokenSecret');
-$config['host']            = 'openphoto.adrien-gallou.fr';
+$config['host']            = 'photos.adrien-gallou.fr';
 
