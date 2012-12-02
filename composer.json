@@ -1,0 +1,13 @@
+{
+    "name": "agallou/openphoto-tools",
+    "description": "CLI Tools for openphoto",
+    "require": {
+        "themattharris/tmhoauth": "dev-master"
+    },
+    "authors": [
+        {
+            "name": "Adrien Gallou",
+            "email": "adriengallou@gmail.com"
+        }
+    ]
+}

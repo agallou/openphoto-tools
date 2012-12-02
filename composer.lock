@@ -1,0 +1,48 @@
+{
+    "hash": "06c01efac9b8adf7cb1894cfc817e124",
+    "packages": [
+        {
+            "name": "themattharris/tmhoauth",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kud/tmhoauth",
+                "reference": "a3a296d13cd6b27a52715201a3bff0c1c2a2fd40"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/kud/tmhoauth/archive/a3a296d13cd6b27a52715201a3bff0c1c2a2fd40.zip",
+                "reference": "a3a296d13cd6b27a52715201a3bff0c1c2a2fd40",
+                "shasum": ""
+            },
+            "time": "2012-03-27 13:46:18",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Themattharris": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Erwann MEST",
+                    "email": "erwann.mest@gmail.com"
+                },
+                {
+                    "name": "Matt Harris",
+                    "email": "matt@themattharris.com"
+                }
+            ],
+            "description": "An OAuth 1.0A library written in PHP"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "themattharris/tmhoauth": 20
+    }
+}
