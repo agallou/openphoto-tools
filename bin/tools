@@ -1,0 +1,48 @@
+#!/usr/bin/env php
+<?php
+
+$loader = require __DIR__ . '/../vendor/autoload.php';
+
+$rootDir = __DIR__ . '/../';
+
+include $rootDir . '/vendor/api-php/OpenPhotoOAuth.php';
+include $rootDir . '/src/syncLogger.class.php';
+include $rootDir . '/src/OpenPhotoOAuthFactory.class.php';
+include $rootDir . '/src/functions.php';
+include $rootDir . '/config/defaults.php';
+
+require $rootDir . '/vendor/themattharris/tmhoauth/src/Themattharris/TmhOAuth.php';
+
+use Openphototools\Command\TweetCommand;
+use Openphototools\Application;
+
+$configFile = __DIR__ . '/../config/config.php';
+
+if (!is_file($configFile)) {
+  print('No config file' . PHP_EOL);
+  exit(1);
+}
+
+$deps = include $configFile;
+
+$oAuthFactory = new OpenPhotoOAuthFactory();
+$deps['openphoto'] = $oAuthFactory->create($config);
+
+
+$twitter = new \Themattharris\tmhOAuth(array(
+  'consumer_key'    => $deps['twitter.consumer_key'],
+  'consumer_secret' => $deps['twitter.consumer_secret'],
+  'user_token'      => $deps['twitter.user_token'],
+  'user_secret'     => $deps['twitter.user_secret'],
+));
+
+$deps['twitter'] = $twitter;
+
+$deps['logger'] = new syncLogger();
+
+$deps['exiftran.path'] = $config['exiftran'];
+
+$application = new Application();
+$application->setDependancies($deps);
+$application->add(new TweetCommand);
+$application->run();

@@ -4,3 +4,5 @@ vendor/themattharris
 vendor/composer
 vendor/autoload.php
 vendor/symfony
+vendor/pimple
+config/config.php

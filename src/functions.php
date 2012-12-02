@@ -46,7 +46,7 @@ function isFileUploaded($exiftran, $hashs, $file)
   copy($file, $tmpFile);
   exec(sprintf('%s -ai %s 2>/dev/null', $exiftran, $tmpFile));
   $sha1 = sha1_file($tmpFile);
-  
+
   return in_array($sha1, $hashs);
 }
 
@@ -62,7 +62,7 @@ function uploadFile(OpenPhotoOAuth $client, syncLogger $logger, $exiftran, $hash
   }
   elseif(substr($dir, 4, 1) == '-' && substr($dir, 10, 1) == '_')
   {
-    $mainTag = substr($dir, 11);  
+    $mainTag = substr($dir, 11);
   }
   else
   {
@@ -71,7 +71,7 @@ function uploadFile(OpenPhotoOAuth $client, syncLogger $logger, $exiftran, $hash
 
   $tags     =  $mainTag . ',__synchronised__';
   $title    = $dir . '/' . $title;
- 
+
   if (!isFileUploaded($exiftran, $hashs, $file))
   {
     $logger->log(sprintf('[uploading] %s', $file));
@@ -104,7 +104,7 @@ function getPaths($dir)
   foreach ($iterator as $path) {
     if ($path->isDir()) {
       continue;
-    } 
+    }
     $pathName = $path->getRealPath();
     if (strtolower(substr($pathName, -3)) != 'jpg')
     {
