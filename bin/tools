@@ -16,6 +16,8 @@ require $rootDir . '/vendor/themattharris/tmhoauth/src/Themattharris/TmhOAuth.ph
 use Openphototools\Command\TweetCommand;
 use Openphototools\Command\SyncFolderCommand;
 use Openphototools\Command\AddTagToTagCommand;
+use Openphototools\Command\AddLocationToTagCommand;
+
 use Openphototools\Application;
 
 $configFile = __DIR__ . '/../config/config.php';
@@ -49,5 +51,7 @@ $application->setDependancies($deps);
 $application->add(new TweetCommand);
 $application->add(new SyncFolderCommand);
 $application->add(new AddTagToTagCommand);
+$application->add(new AddLocationToTagCommand);
+
 
 $application->run();
