@@ -3,3 +3,4 @@ composer.phar
 vendor/themattharris
 vendor/composer
 vendor/autoload.php
+vendor/symfony

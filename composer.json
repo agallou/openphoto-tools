@@ -2,7 +2,8 @@
     "name": "agallou/openphoto-tools",
     "description": "CLI Tools for openphoto",
     "require": {
-        "themattharris/tmhoauth": "dev-master"
+        "themattharris/tmhoauth": "dev-master",
+        "symfony/console": "2.1"
     },
     "authors": [
         {
