@@ -13,7 +13,7 @@ include $rootDir . '/config/defaults.php';
 $oAuthFactory = new OpenPhotoOAuthFactory();
 $client       = $oAuthFactory->create($config);
 $logger       = new syncLogger();
-$hashs        = getHashs($client);
+$hashs        = getHashs($client, $logger);
 
 $logger->log(sprintf('%s duplicates photos on openphoto', count($hashs) - count(array_unique($hashs))));
 $hashs2 = $hashs;

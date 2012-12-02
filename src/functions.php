@@ -1,6 +1,6 @@
 <?php
 
-function getHashs(OpenPhotoOAuth $client, $tags = null)
+function getHashs(OpenPhotoOAuth $client, syncLogger $logger, $tags = null)
 {
   $hashs    = array();
   $continue = true;
@@ -10,12 +10,17 @@ function getHashs(OpenPhotoOAuth $client, $tags = null)
     $page++;
     //bug un page, the same photos are return even if we change the page number ?
     //to prevent that, we increase the pageSize.
-    $params = array('page' => $page, 'pageSize' => 10000);
+    $params = array('page' => $page, 'pageSize' => 1000);
     if (null !== $tags)
     {
       $params['tags'] = $tags;
     }
     $response  = $client->get("/photos/list.json", $params);
+    if (false === $response || !strlen(trim($response)))
+    {
+      $logger->log('[error] Error getting /photos/list.json');
+      break;
+    }
     $dResponse = json_decode($response);
     $photos    = $dResponse->result;
     foreach ($photos as $photo)
@@ -50,9 +55,23 @@ function uploadFile(OpenPhotoOAuth $client, syncLogger $logger, $exiftran, $hash
   $expTitle = explode('/', $file);
   $title    = array_pop($expTitle);
   $dir      = array_pop($expTitle);
+  if (substr($dir, 0, 1) == '[' && substr($dir, -1, 1) == ']')
+  {
+
+    $mainTag = substr($dir, 14, -1);
+  }
+  elseif(substr($dir, 4, 1) == '-' && substr($dir, 10, 1) == '_')
+  {
+    $mainTag = substr($dir, 11);  
+  }
+  else
+  {
+    $mainTag  = substr($dir, 11);
+  }
+
+  $tags     =  $mainTag . ',__synchronised__';
   $title    = $dir . '/' . $title;
-  $tags     = substr($dir, 11) . ',__synchronised__';
-  
+ 
   if (!isFileUploaded($exiftran, $hashs, $file))
   {
     $logger->log(sprintf('[uploading] %s', $file));
@@ -61,6 +80,16 @@ function uploadFile(OpenPhotoOAuth $client, syncLogger $logger, $exiftran, $hash
       'title' => $title,
       'tags'  => $tags,
     ));
+    $result = json_decode($r);
+    if (null === $result)
+    {
+       $logger->log('[error] Error getting /photo/upload.json');
+       return;
+    }
+    if ($result->code != 201)
+    {
+      $logger->log(sprintf('[error] [%s] %s', $result->code, $result->message));
+    }
   }
   else
   {

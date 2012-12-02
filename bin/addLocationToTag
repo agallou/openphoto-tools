@@ -12,7 +12,8 @@ $oAuthFactory = new OpenPhotoOAuthFactory();
 $client       = $oAuthFactory->create($config);
 $logger       = new syncLogger();
 $tag          = $argv[1];
-$tagsAdd      = $argv[2];
+$latitude     = $argv[2];
+$longitude    = $argv[3];
 $hashs        = getHashs($client, $logger, $tag);
 $total        = count($hashs);
 $cpt          = 0;
@@ -24,7 +25,10 @@ foreach (array_keys($hashs) as $idPhoto)
 {
   $cpt++;
   $position  = sprintf('[%s/%s]', str_pad($cpt,strlen($total), '0', STR_PAD_LEFT), $total);
-  $response  = $client->post(sprintf("/photo/%s/update.json", $idPhoto), array('tagsAdd' => $tagsAdd));
+  $response  = $client->post(sprintf("/photo/%s/update.json", $idPhoto), array(
+    'latitude'  => $latitude,
+    'longitude' => $longitude,
+  ));
   $dResponse = json_decode($response);
   $logger->log(sprintf('%s Updating photo "%s"...', $position, $idPhoto));
   if (false !== $dResponse)
@@ -36,7 +40,7 @@ foreach (array_keys($hashs) as $idPhoto)
     }
   }
   $updated++;
-  $logger->log(sprintf('%s Tag(s) "%s" added to photo "%s"', $position, $tagsAdd, $idPhoto));
+  $logger->log(sprintf('%a latitude "%s" and longitude %s added to photo "%s"', $position, $latitude, $longitude, $idPhoto));
 }
  $logger->log(sprintf('%s photos updated', $cpt++));
 

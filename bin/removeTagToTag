@@ -13,7 +13,7 @@ $client       = $oAuthFactory->create($config);
 $logger       = new syncLogger();
 $tag          = $argv[1];
 $tagsAdd      = $argv[2];
-$hashs        = getHashs($client, $tag);
+$hashs        = getHashs($client, $logger, $tag);
 
 $logger->log(sprintf('%s photos tagged with "%s"', count($hashs), $tag));
 
