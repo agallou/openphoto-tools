@@ -19,6 +19,7 @@ use Openphototools\Command\AddTagToTagCommand;
 use Openphototools\Command\AddLocationToTagCommand;
 use Openphototools\Command\AddGroupToTagCommand;
 use Openphototools\Command\TagRenameCommand;
+use Openphototools\Command\TagRemoveCommand;
 
 
 use Openphototools\Application;
@@ -57,6 +58,7 @@ $application->add(new AddTagToTagCommand);
 $application->add(new AddLocationToTagCommand);
 $application->add(new AddGroupToTagCommand);
 $application->add(new TagRenameCommand);
+$application->add(new TagRemoveCommand);
 
 
 $application->run();
