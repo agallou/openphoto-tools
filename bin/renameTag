@@ -1,7 +1,0 @@
-#!/bin/bash
-./bin/addTagToTag "$1" "$2,__temp_____"
-./bin/removeTagToTag "__temp_____" "$1"
-./bin/removeTagToTag "__temp_____" "__temp_____"
-
-
-
