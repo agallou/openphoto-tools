@@ -40,8 +40,7 @@ abstract class BaseTagAddCommand extends Command
       {
         $cpt++;
         $position  = sprintf('[%s/%s]', str_pad($cpt,strlen($total), '0', STR_PAD_LEFT), $total);
-        $this->getUpdateParameters($input);
-        $response  = $client->post(sprintf("/photo/%s/update.json", $idPhoto), $this->getUpdateParameters($input));
+        $response  = $client->post(sprintf("/photo/%s/update.json", $idPhoto), $this->getUpdateParameters($input, $idPhoto));
         $dResponse = json_decode($response);
         $logger->log(sprintf('%s Updating photo "%s"...', $position, $idPhoto));
         if (false !== $dResponse)
@@ -58,6 +57,6 @@ abstract class BaseTagAddCommand extends Command
       $logger->log(sprintf('%s photos updated', $cpt++));
     }
 
-    abstract protected function getUpdateParameters(InputInterface $input);
+    abstract protected function getUpdateParameters(InputInterface $input, $idPhoto);
     abstract protected function getEndLog($input, $position, $idPhoto);
 }

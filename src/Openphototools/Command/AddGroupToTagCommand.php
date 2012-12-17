@@ -23,8 +23,19 @@ class AddGroupToTagCommand extends Command
         ;
     }
 
-    protected function getUpdateParameters(InputInterface $input) {
-      return array('groups' => $input->getArgument('added-group'));
+    protected function getUpdateParameters(InputInterface $input, $idPhoto) {
+      $deps   = $this->getApplication()->getDependancies();
+      $client = $deps['openphoto'];
+      $logger = $deps['logger'];
+
+      $response  = $client->get(sprintf("/photo/%s/view.json", $idPhoto));
+      $dResponse = json_decode($response);
+      $groups    = $dResponse->result->groups;
+
+      $groups    = array_merge($groups, array($input->getArgument('added-group')));
+      $groups    = array_unique($groups);
+
+      return array('groups' => implode(',', $groups));
     }
 
     protected function getEndLog($input, $position, $idPhoto) {

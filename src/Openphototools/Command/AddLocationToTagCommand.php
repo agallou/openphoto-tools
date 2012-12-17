@@ -27,7 +27,7 @@ class AddLocationToTagCommand extends Command
         ;
     }
 
-    protected function getUpdateParameters(InputInterface $input) {
+    protected function getUpdateParameters(InputInterface $input, $idPhoto) {
       return array(
         'longitude' => str_replace('_', '-', $input->getArgument('longitude')),
         'latitude'  => str_replace('_', '-', $input->getArgument('latitude')),

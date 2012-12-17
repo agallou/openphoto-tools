@@ -23,7 +23,7 @@ class AddTagToTagCommand extends Command
         ;
     }
 
-    protected function getUpdateParameters(InputInterface $input) {
+    protected function getUpdateParameters(InputInterface $input, $idPhoto) {
       return array('tagsAdd' => $input->getArgument('added-tag'));
     }
 

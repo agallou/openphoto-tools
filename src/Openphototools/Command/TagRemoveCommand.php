@@ -23,7 +23,7 @@ class TagRemoveCommand extends Command
         ;
     }
 
-    protected function getUpdateParameters(InputInterface $input) {
+    protected function getUpdateParameters(InputInterface $input, $idPhoto) {
       return array(
         'tagsRemove' => $input->getArgument('removed-tag'),
       );
