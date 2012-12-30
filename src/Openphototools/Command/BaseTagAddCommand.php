@@ -59,4 +59,14 @@ abstract class BaseTagAddCommand extends Command
 
     abstract protected function getUpdateParameters(InputInterface $input, $idPhoto);
     abstract protected function getEndLog($input, $position, $idPhoto);
+
+    public function getPhotoInfo($idPhoto) {
+      $deps   = $this->getApplication()->getDependancies();
+      $client = $deps['openphoto'];
+      $logger = $deps['logger'];
+
+      $response  = $client->get(sprintf("/photo/%s/view.json", $idPhoto));
+      return json_decode($response);
+    }
+
 }

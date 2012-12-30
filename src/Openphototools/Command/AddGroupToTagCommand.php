@@ -24,12 +24,7 @@ class AddGroupToTagCommand extends Command
     }
 
     protected function getUpdateParameters(InputInterface $input, $idPhoto) {
-      $deps   = $this->getApplication()->getDependancies();
-      $client = $deps['openphoto'];
-      $logger = $deps['logger'];
-
-      $response  = $client->get(sprintf("/photo/%s/view.json", $idPhoto));
-      $dResponse = json_decode($response);
+      $dResponse = $this->getPhotoInfo($idPhoto);
       $groups    = $dResponse->result->groups;
 
       $groups    = array_merge($groups, array($input->getArgument('added-group')));

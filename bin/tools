@@ -20,6 +20,8 @@ use Openphototools\Command\AddLocationToTagCommand;
 use Openphototools\Command\AddGroupToTagCommand;
 use Openphototools\Command\TagRenameCommand;
 use Openphototools\Command\TagRemoveCommand;
+use Openphototools\Command\FixDatesCommand;
+use Openphototools\Command\BackupCommand;
 
 
 use Openphototools\Application;
@@ -59,6 +61,8 @@ $application->add(new AddLocationToTagCommand);
 $application->add(new AddGroupToTagCommand);
 $application->add(new TagRenameCommand);
 $application->add(new TagRemoveCommand);
+$application->add(new FixDatesCommand);
+$application->add(new BackupCommand);
 
 
 $application->run();
