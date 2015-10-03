@@ -23,6 +23,10 @@ class BackupCommand extends Command
                 'dir',
                 InputArgument::REQUIRED
             )
+              ->addOption(
+                'iso',
+                InputOption::VALUE_NONE
+              )
         ;
     }
 
@@ -114,22 +118,23 @@ class BackupCommand extends Command
 
         $logger->setTotal(null);
 
+        if ($input->getOption('iso')) {
 
+          $cmd = sprintf('cd %s; dirsplit -s 700M -e2 %s', escapeshellarg($listDir), escapeshellarg(realpath($photosDir)));
+          echo $cmd . PHP_EOL;
+          passthru($cmd);
+          echo PHP_EOL;
 
-        $cmd = sprintf('cd %s; dirsplit -s 700M -e2 %s', escapeshellarg($listDir), escapeshellarg(realpath($photosDir)));
-        echo $cmd . PHP_EOL;
-        passthru($cmd);
-        echo PHP_EOL;
+          foreach (glob($listDir . '/vol_*') as $dir)
+          {
+        	  $cmd = sprintf("mkisofs -o %s.iso -D -r --joliet-long -graft-points -path-list %s", $isoDir . '/' . basename($dir), $dir);
+        	  echo $cmd . PHP_EOL;
+        	  passthru($cmd);
+          }
 
-        foreach (glob($listDir . '/vol_*') as $dir)
-        {
-      	  $cmd = sprintf("mkisofs -o %s.iso -D -r --joliet-long -graft-points -path-list %s", $isoDir . '/' . basename($dir), $dir);
-      	  echo $cmd . PHP_EOL;
-      	  passthru($cmd);
+          passthru(sprintf('rm -rf %s', escapeshellarg($photosDir)));
+          passthru(sprintf('rm -rf %s', escapeshellarg($listDir)));
         }
-
-        passthru(sprintf('rm -rf %s', escapeshellarg($photosDir)));
-        passthru(sprintf('rm -rf %s', escapeshellarg($listDir)));
     }
 
 }
